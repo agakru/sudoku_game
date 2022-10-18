@@ -1,5 +1,4 @@
 import random
-from sudoku import Sudoku
 
 def board_to_sudoku():
     square=[]
@@ -42,8 +41,8 @@ def solution_sudoku(board):
     return(transform_sudoku)
 
 def sudoku_with_empty(board):
-    #minimum have to be not empty place 20 max 61 place in sudoku
-    how_many_empty_place=random.randint(20,61)
+    #min empty place 20 max 41 place in sudoku
+    how_many_empty_place=random.randint(20,41)
     empty_place=0
     while how_many_empty_place!=empty_place:
         r_col=random.randint(0,8)
@@ -52,7 +51,7 @@ def sudoku_with_empty(board):
             board[r_row][r_col]=0
             empty_place+=1
     
-    print('\n',board[0],'\n',board[1],'\n',board[2],'\n',board[3],'\n',board[4],'\n',board[5],'\n',board[6],'\n',board[7],'\n',board[8],'\n')
+    #print('\n',board[0],'\n',board[1],'\n',board[2],'\n',board[3],'\n',board[4],'\n',board[5],'\n',board[6],'\n',board[7],'\n',board[8],'\n')
     return(board)
 
 def possible(board,row,col,number):
@@ -72,6 +71,7 @@ def possible(board,row,col,number):
             if board[sq_r][sq_c]==number:
                 return False
     return True
+
 def find_empty_place(board):
     for row in range(9):
         for col in range(9):
@@ -84,7 +84,7 @@ def solve(board):
     global board_solved
     find=find_empty_place(board)
     if find is None:
-        board_solved=board
+        board_solved=copy(board)
         return True
     else:
         row, col = find
