@@ -44,7 +44,7 @@ pos= 0,0
 start = time.time()
 anwser=' '
 button_restart=pygame.Rect(50,520,100,25)
-button_quick=pygame.Rect(400,520,100,25)
+button_quit=pygame.Rect(400,520,100,25)
 button_solve=pygame.Rect(220,520,100,25)
 
 def place_clicked(pos):
@@ -66,7 +66,7 @@ def restart_clicked(pos):
     else:
         return False
 
-def quick_clicked(pos):
+def quit_clicked(pos):
     if pos[0]>400 and pos[0]<500 and pos[1]>520 and pos[1]<545:
         return True
     else:
@@ -152,9 +152,9 @@ while run:
     text_surf =base_font.render("Restart", True, (0,0,0))
     screen.blit(text_surf, (button_restart.x+10,button_restart.y))
 
-    btn_quick=pygame.draw.rect(screen,(150,150,150),button_quick)
-    text_surf =base_font.render("Quick", True, (0,0,0))
-    screen.blit(text_surf, (button_quick.x+20,button_quick.y))
+    btn_quit=pygame.draw.rect(screen,(150,150,150),button_quit)
+    text_surf =base_font.render("Quit", True, (0,0,0))
+    screen.blit(text_surf, (button_quit.x+20,button_quit.y))
 
     btn_solve=pygame.draw.rect(screen,(150,150,150),button_solve)
     text_surf =base_font.render("Solve", True, (0,0,0))
@@ -234,7 +234,7 @@ while run:
                 temp_board=clear_board(temp_board)
                 key =0  
                 start=time.time()
-            elif quick_clicked(pos):
+            elif quit_clicked(pos):
                 pygame.quit()
                 sys.exit()
             elif solve_clicked(pos):

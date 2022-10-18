@@ -1,4 +1,5 @@
 import random
+from copy import copy
 
 def board_to_sudoku():
     square=[]
