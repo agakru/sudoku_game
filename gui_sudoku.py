@@ -37,6 +37,7 @@ global pos
 global rectangle
 global mistake
 global key
+global previous_pos
 key=' '
 mistake=0
 rectangle=[0,0]
@@ -45,7 +46,8 @@ start = time.time()
 anwser=' '
 button_restart=pygame.Rect(50,520,100,25)
 button_quit=pygame.Rect(400,520,100,25)
-button_solve=pygame.Rect(220,520,100,25)
+button_solve=pygame.Rect(170,520,100,25)
+button_hint=pygame.Rect(290,520,100,25)
 
 def place_clicked(pos):
     if pos[0]>50 and pos[0]<500 and pos[1]>50 and pos[1]<500:
@@ -71,9 +73,21 @@ def quit_clicked(pos):
         return True
     else:
         return False
-    
+def hint_clicked(pos):
+    if pos[0]>290 and pos[0]<390 and pos[1]>520 and pos[1]<545:
+        return True
+    else:
+        return False  
+
+def hint(pre_pos,temp_board):
+    gap=50
+    y =(pre_pos[0]//gap)-1
+    x=(pre_pos[1]//gap)-1
+    temp_board[x][y]=check_if_board_can_solve[x][y]
+    return temp_board
+
 def solve_clicked(pos):
-    if pos[0]>220 and pos[0]<320 and pos[1]>520 and pos[1]<545:
+    if pos[0]>170 and pos[0]<270 and pos[1]>520 and pos[1]<545:
         return True
     else:
         return False
@@ -139,9 +153,10 @@ def format_time(time_in_sec):
     sec = time_in_sec%60
     minute = time_in_sec//60
     hour = minute//60
-
-    time = " "+str(hour) + ":"+ str(minute) + ":" + str(sec)
-    return time
+    time_str = str(hour) + ":"+ str(minute) + ":" + str(sec)
+    struct_time=time.strptime( time_str,"%H:%M:%S")
+    time_format=time.strftime("%H:%M:%S",struct_time)
+    return time_format
 
 while run:
     
@@ -154,11 +169,15 @@ while run:
 
     btn_quit=pygame.draw.rect(screen,(150,150,150),button_quit)
     text_surf =base_font.render("Quit", True, (0,0,0))
-    screen.blit(text_surf, (button_quit.x+20,button_quit.y))
+    screen.blit(text_surf, (button_quit.x+25,button_quit.y))
 
     btn_solve=pygame.draw.rect(screen,(150,150,150),button_solve)
     text_surf =base_font.render("Solve", True, (0,0,0))
     screen.blit(text_surf, (button_solve.x+20,button_solve.y))
+
+    btn_hint=pygame.draw.rect(screen,(150,150,150),button_hint)
+    text_surf =base_font.render("Hint", True, (0,0,0))
+    screen.blit(text_surf, (button_hint.x+25,button_hint.y))
 
     for i in range(10):
         if i%3==0:
@@ -228,10 +247,12 @@ while run:
                     key=temp_board[pos[1]//50-1][pos[0]//50-1]
                 else:
                     key=0
-                active=True    
+                active=True
+                previous_pos=pos    
             elif restart_clicked(pos):
                 active=False
                 temp_board=clear_board(temp_board)
+                mistake=0
                 key =0  
                 start=time.time()
             elif quit_clicked(pos):
@@ -240,6 +261,11 @@ while run:
             elif solve_clicked(pos):
                 active=False
                 temp_board=solve_place(pos)
+            elif hint_clicked(pos):
+                active=False
+                if place_clicked(previous_pos):
+                    temp_board=hint(previous_pos,temp_board)
+                    
             else:
                 active=False
 
@@ -265,7 +291,7 @@ while run:
         screen.blit(value_end,(30,545))
 
     text = base_font.render("Time:" + format_time(play_time), 1, (0,0,0))
-    screen.blit(text, (380, 20))  
+    screen.blit(text, (350, 20))  
 
     pygame.display.update()
     pygame.display.flip()
